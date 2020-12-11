@@ -1,5 +1,13 @@
 
 
+const tba = "Instructor: TBA"; // PLaceholder for professor that hasn't been assigned
+const instructorHidderClasses = '.hidden.section-deliveryFilter' // Element that stops instructor from being displayed
+const sectInstContClass = ".section-instructors-container"; // Container holding the instructor name
+const sectInstClass = ".section-instructor" // Span holding instructor name
+const planetTerpRatingClass = ".planet-terp-rating" // Class for planet terp rating objects
+const planetTerpLogoPath = '/images/PlanetTerpLogo.png'; // Goes next to rating
+const planetTerpBlue = "#0099FC"; // Color of planetTerps logo
+
 var profNames = new Set(); // Store all professor names on page
 var profInfo = new Object(); // Store professor ratings, links, slug, etc
 
@@ -9,7 +17,21 @@ var profInfo = new Object(); // Store professor ratings, links, slug, etc
 function getProfessors(){
     var profs = document.querySelectorAll(".section-instructor");
     for (prof of profs){
-        profNames.add(prof.innerText);
+        var name = prof.innerText
+        var twoNames = name.includes(","); // Checks if more than one professor is teaching
+
+        if (twoNames){
+            var names = name.split(',');
+            var firstProf = names[0];
+            var secondProf = names[1];
+
+            profNames.add(firstProf);
+            profNames.add(secondProf);
+        } else {
+            if (name != tba){
+                profNames.add(name);
+            }
+        }
     }
 }
 
@@ -52,16 +74,16 @@ async function getInfoPT(name){
 
 
 function displayRating(name){
-    var sectionInfo = document.querySelectorAll(".section-instructors-container");
+    var sectionInfo = document.querySelectorAll(sectInstContClass);
     for (section of sectionInfo){
 
-        var testName = section.querySelector(".section-instructor").innerText;
+        var testName = section.querySelector(sectInstClass).innerText;
 
         /* Find sections with given professor name */
         if (name === testName){
 
             /* Verify rating not already added */
-            if (section.querySelectorAll(".rating-planet-terp").length == 0){
+            if (section.querySelectorAll(planetTerpRatingClass).length == 0){
 
                 if (! (profInfo[name] === null)){
                     
@@ -70,7 +92,7 @@ function displayRating(name){
                     var imageLink = document.createElement('a');
                     imageLink.href = profInfo[name]['url'];
                     var image = document.createElement('img');
-                    image.src = chrome.runtime.getURL('/images/PlanetTerpLogo.png');
+                    image.src = chrome.runtime.getURL(planetTerpLogoPath);
                     image.style.marginLeft = "5px";
                     image.style.marginRight = "3px";
                     imageLink.appendChild(image);
@@ -82,7 +104,7 @@ function displayRating(name){
                     node.appendChild(textNode);
                     node.href = profInfo[name]['url'];
                     node.className = 'rating-planet-terp';
-                    node.style.color = "#0099FC";
+                    node.style.color = planetTerpBlue;
                     section.appendChild(node);
                 }
             }
@@ -109,7 +131,7 @@ $(document).ready(() => {
 })
 
 /* Get all elements that control whether professors are visible */
-var sectionBlockers = document.querySelectorAll('.hidden.section-deliveryFilter');
+var sectionBlockers = document.querySelectorAll(instructorHidderClasses);
 
 /* Add an observer to each of the blockers waiting for
     professors to become visible */
