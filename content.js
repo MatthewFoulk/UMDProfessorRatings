@@ -1,15 +1,24 @@
 
-
+// UMD Schedule of Classes
+const contentContainerClass = ".soc-content-container"
 const tba = "Instructor: TBA"; // PLaceholder for professor that hasn't been assigned
 const instructorHidderClasses = '.hidden.section-deliveryFilter' // Element that stops instructor from being displayed
 const sectInstContClass = ".section-instructors-container"; // Container holding the instructor name
 const sectInstClass = ".section-instructor" // Span holding instructor name
+
+// PlanetTerp
 const ratingPlanetTerpClass = ".rating-planet-terp" // Class for planet terp rating objects
 const logoPlanetTerpPath = '/images/PlanetTerpLogo.png'; // Goes next to rating
 const planetTerpBlue = "#0099FC"; // Color of planetTerps logo
 
+// RateMyProfessor
+const ratingRateMyProfessorClass = ".rating-rate-my-professor" // Class for RMP rating objects
+const logoRateMyProfessorPath = 'images/RateMyProfessorLogo.png' // Logo next to rating
+const rateMyProfessorBlue = '#0021FF' //Color of RMP logo
+
 var profNames = new Set(); // Store all professor names on page
 var profInfo = new Object(); // Store professor ratings, links, slug, etc
+var pk_id_Name = new Object(); // Key val pair (pk_id: prof_name)
 
 /**
  * Returns the names of all the professors on the page
@@ -54,44 +63,84 @@ async function getInfoPT(name){
         url: `https://cors-anywhere.herokuapp.com/https://api.planetterp.com/v1/professor?name=${firstName}%20${lastName}&reviews=true`,
         type: "GET",
         success: (result) => {
+            console.log(result);
+            profInfo[name]['pt'] = new Object;
             var totalReviews = result["reviews"].length;
-            var averageRating = 0;
-            for (review of result["reviews"]) {
-                averageRating += review["rating"] / totalReviews;
+            /* No reviews */
+            if (totalReviews == 0){
+                profInfo[name]['pt'] = null;
+
+            /* Reviews */
+            } else {
+                var averageRating = 0;
+                for (review of result["reviews"]) {
+                    averageRating += review["rating"] / totalReviews;
+                }
+                /* Adding rating to professorRatings */
+                profInfo[name]['pt']['rating'] = averageRating;
+                profInfo[name]['pt']['url'] = `https://planetterp.com/professor/${result['slug']}`;
             }
-            /* Adding rating to professorRatings */
-            profInfo[name] = new Object();
-            profInfo[name]['rating'] = averageRating;
-            profInfo[name]['url'] = `https://planetterp.com/professor/${result['slug']}`;
         },
         error: (error) => {
             console.log(error)
             /* Couldn't find professor */
-            profInfo[name]["rating"] = 0;
+            profInfo[name]['pt'] = null;
+        },
+    });
+}
+
+function getInfoRMP(name){
+    /* Divide full name into first and last names */
+    var names = name.split(" ")
+    var firstName = names[0];
+    var lastName = names[1];
+    /* Fetch professor ratings from Planet Terp */
+    $.ajax({
+        url: `https://cors-anywhere.herokuapp.com/https://solr-aws-elb-production.ratemyprofessors.com//solr/rmp/select/?solrformat=true&rows=1&wt=json&q=${lastName}+${firstName}+AND+schoolid_s%3A1270&defType=edismax&qf=teacherfirstname_t%5E2000+teacherlastname_t%5E2000+siteName=rmp&rows=1&start=0&fl=pk_id+averageratingscore_rf`,
+        success: (result) => {
+            profInfo[name]['rmp'] = new Object;
+            result = JSON.parse(result);
+            console.log(result)
+
+            /* Couldn't find professor */
+            if (result['response']['docs'].length == 0){
+                profInfo[name]['rmp'] = null;
+
+            /* Adding rating to professorRatings */
+            } else {
+                var pk_id = result['response']['docs'][0]['pk_id'];
+                pk_id_Name[pk_id] = name;
+                profInfo[name]['rmp']['rating'] = result['response']['docs'][0]['averageratingscore_rf'];
+                profInfo[name]['rmp']['url'] = `https://www.ratemyprofessors.com/ShowRatings.jsp?tid=${pk_id}&showMyProfs=true`;
+            }
+        },
+        error: (error) => {
+            console.log(error)
+            /* Couldn't find professor */
+            profInfo[name]['rmp'] = null;
         },
     });
 }
 
 
-function displayRating(name){
+function displayRatingPT(name){
     var sectionInfo = document.querySelectorAll(sectInstContClass);
     for (section of sectionInfo){
 
         var testName = section.querySelector(sectInstClass).innerText;
 
         /* Find sections with given professor name */
-        if (name === testName){
+        if (name == testName){
 
             /* Verify rating not already added */
             if (section.querySelectorAll(ratingPlanetTerpClass).length == 0){
-                console.log(section);
-                console.log(section.querySelectorAll(ratingPlanetTerpClass));
-                if (! (profInfo[name] === null)){
+
+                if (! (profInfo[name]["pt"] == null)){
                     
                     /* Place an image next to rating with planet terp logo
                         also with link to professor reviews on planet terp */
                     var imageLink = document.createElement('a');
-                    imageLink.href = profInfo[name]['url'];
+                    imageLink.href = profInfo[name]["pt"]['url'];
                     var image = document.createElement('img');
                     image.src = chrome.runtime.getURL(logoPlanetTerpPath);
                     image.style.marginLeft = "5px";
@@ -101,11 +150,50 @@ function displayRating(name){
                     
                     /* Create display element with link to professor reviews */
                     var node = document.createElement("a");
-                    var textNode = document.createTextNode(profInfo[name]['rating'].toFixed(2));
+                    var textNode = document.createTextNode(profInfo[name]["pt"]['rating'].toFixed(2));
                     node.appendChild(textNode);
-                    node.href = profInfo[name]['url'];
+                    node.href = profInfo[name]["pt"]['url'];
                     node.className = 'rating-planet-terp';
                     node.style.color = planetTerpBlue;
+                    section.appendChild(node);
+                }
+            }
+        }
+    }
+}
+
+function displayRatingRMP(name){
+
+    var sectionInfo = document.querySelectorAll(sectInstContClass);
+    for (section of sectionInfo){
+
+        var testName = section.querySelector(sectInstClass).innerText;
+
+        /* Find sections with given professor name */
+        if (name == testName){
+
+            /* Verify rating not already added */
+            if (section.querySelectorAll(ratingRateMyProfessorClass).length == 0){
+
+                if (! (profInfo[name]["rmp"] == null)){
+                    /* Place an image next to rating with planet terp logo
+                        also with link to professor reviews on planet terp */
+                    var imageLink = document.createElement('a');
+                    imageLink.href = profInfo[name]['rmp']['url'];
+                    var image = document.createElement('img');
+                    image.src = chrome.runtime.getURL(logoRateMyProfessorPath);
+                    image.style.marginLeft = "5px";
+                    image.style.marginRight = "3px";
+                    imageLink.appendChild(image);
+                    section.appendChild(imageLink);
+                    
+                    /* Create display element with link to professor reviews */
+                    var node = document.createElement("a");
+                    var textNode = document.createTextNode(profInfo[name]["rmp"]['rating'].toFixed(2));
+                    node.appendChild(textNode);
+                    node.href = profInfo[name]["rmp"]['url'];
+                    node.className = 'rating-rate-my-professor';
+                    node.style.color = rateMyProfessorBlue;
                     section.appendChild(node);
                 }
             }
@@ -121,49 +209,62 @@ $(document).ready(() => {
     /* Get professors visible on page */
     getProfessors();
 
-    console.log(profNames);
-
     /* Fetch professor ratings for visible professors */
     for (name of profNames){
         if (!(name in profInfo)){
+            profInfo[name] = new Object();
             getInfoPT(name);
+            getInfoRMP(name);
         }
     }
 })
 
-/* Get all elements that control whether professors are visible */
-var sectionBlockers = document.querySelectorAll(instructorHidderClasses);
 
-/* Add an observer to each of the blockers waiting for
-    professors to become visible */
-for (blocker of sectionBlockers){
-    var observer = new MutationObserver( function(mutations){
-        mutations.forEach( function(mutation) {
-            if (mutation.attributeName !== 'style') return;
+/* Observe if professors become visible */
+var observer = new MutationObserver( function(mutations){
+    mutations.forEach( function(mutation) {
+        if (mutation.attributeName !== 'style') return;
+        if (mutation.target.className != "hidden section-deliveryFilter") return;
+        
+        /* Get professors visible on page */
+        getProfessors();
 
-            /* Get professors visible on page */
-            getProfessors();
-
-            console.log(profNames);
-
-            /* Fetch ratings if do not already have
-                Display Ratings For professors already in
-                profInfo */
-            for (name of profNames){
-                if (!(name in profInfo)){
-                    getInfoPT(name);
-                } else {
-                    displayRating(name);
-                }
+        /* Fetch ratings if do not already have
+            Display Ratings For professors already in
+            profInfo */
+        for (name of profNames){
+            if (!(name in profInfo)){
+                profInfo[name] = new Object();
+                getInfoPT(name);
+                getInfoRMP(name);
+            } else {
+                displayRatingPT(name);
+                displayRatingRMP(name);
             }
-        });
+        }
     });
+});
 
-    observer.observe(blocker, { attributes: true });
-}
+/* Get all elements that control whether professors are visible */
+var contentContainer = document.querySelector(contentContainerClass);
+
+/* Monitor entire subtree for attribute changes */
+observer.observe(contentContainer, { subtree: true, attributes: true });
 
 $(document).ajaxComplete(function(event, xhr, settings) {
-    var name = xhr['responseJSON']['name'];
-    displayRating(name);
-    console.log(profInfo);
+    
+    /* PT responses */
+    if ( ! (xhr['responseJSON'] == null)){
+        var name = xhr['responseJSON']['name'];
+        displayRatingPT(name);
+        
+    /* RMP responses */
+    } else{
+        var responseJSON = JSON.parse(xhr['responseText'])
+        if (! (responseJSON['response']['docs'][0] == null)){
+            var pk_id = responseJSON['response']['docs'][0]['pk_id'];
+            var name = pk_id_Name[pk_id]
+            displayRatingRMP(name);
+        }
+    }
 })
