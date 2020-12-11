@@ -8,5 +8,7 @@
             "matches": ["https://app.testudo.umd.edu/soc/*"],
             "js" : ["jquery.js", "content.js"]
         }
-    ]
+    ],
+    "web_accessible_resources": ["images/*.jpg", "images/*.png"],
+    "permissions": ["https://cors-anywhere.herokuapp.com/*"]
 }
