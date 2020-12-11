@@ -4,8 +4,8 @@ const tba = "Instructor: TBA"; // PLaceholder for professor that hasn't been ass
 const instructorHidderClasses = '.hidden.section-deliveryFilter' // Element that stops instructor from being displayed
 const sectInstContClass = ".section-instructors-container"; // Container holding the instructor name
 const sectInstClass = ".section-instructor" // Span holding instructor name
-const planetTerpRatingClass = ".planet-terp-rating" // Class for planet terp rating objects
-const planetTerpLogoPath = '/images/PlanetTerpLogo.png'; // Goes next to rating
+const ratingPlanetTerpClass = ".rating-planet-terp" // Class for planet terp rating objects
+const logoPlanetTerpPath = '/images/PlanetTerpLogo.png'; // Goes next to rating
 const planetTerpBlue = "#0099FC"; // Color of planetTerps logo
 
 var profNames = new Set(); // Store all professor names on page
@@ -83,8 +83,9 @@ function displayRating(name){
         if (name === testName){
 
             /* Verify rating not already added */
-            if (section.querySelectorAll(planetTerpRatingClass).length == 0){
-
+            if (section.querySelectorAll(ratingPlanetTerpClass).length == 0){
+                console.log(section);
+                console.log(section.querySelectorAll(ratingPlanetTerpClass));
                 if (! (profInfo[name] === null)){
                     
                     /* Place an image next to rating with planet terp logo
@@ -92,7 +93,7 @@ function displayRating(name){
                     var imageLink = document.createElement('a');
                     imageLink.href = profInfo[name]['url'];
                     var image = document.createElement('img');
-                    image.src = chrome.runtime.getURL(planetTerpLogoPath);
+                    image.src = chrome.runtime.getURL(logoPlanetTerpPath);
                     image.style.marginLeft = "5px";
                     image.style.marginRight = "3px";
                     imageLink.appendChild(image);
