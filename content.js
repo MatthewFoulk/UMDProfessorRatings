@@ -16,6 +16,10 @@ const ratingRateMyProfessorClass = ".rating-rate-my-professor" // Class for RMP 
 const logoRateMyProfessorPath = 'images/RateMyProfessorLogo.png' // Logo next to rating
 const rateMyProfessorBlue = '#0021FF' //Color of RMP logo
 
+// CORS proxy
+const proxy = "https://cryptic-cliffs-23292.herokuapp.com/";
+
+
 var profNames = new Set(); // Store all professor names on page
 var profInfo = new Object(); // Store professor ratings, links, slug, etc
 var pk_id_Name = new Object(); // Key val pair (pk_id: prof_name)
@@ -60,7 +64,7 @@ async function getInfoPT(name){
 
     /* Fetch professor ratings from Planet Terp */
     $.ajax({
-        url: `https://cors-anywhere.herokuapp.com/https://api.planetterp.com/v1/professor?name=${firstName}%20${lastName}&reviews=true`,
+        url: proxy + `https://api.planetterp.com/v1/professor?name=${firstName}%20${lastName}&reviews=true`,
         type: "GET",
         success: (result) => {
             console.log(result);
@@ -96,7 +100,7 @@ function getInfoRMP(name){
     var lastName = names[1];
     /* Fetch professor ratings from Planet Terp */
     $.ajax({
-        url: `https://cors-anywhere.herokuapp.com/https://solr-aws-elb-production.ratemyprofessors.com//solr/rmp/select/?solrformat=true&rows=1&wt=json&q=${lastName}+${firstName}+AND+schoolid_s%3A1270&defType=edismax&qf=teacherfirstname_t%5E2000+teacherlastname_t%5E2000+siteName=rmp&rows=1&start=0&fl=pk_id+averageratingscore_rf`,
+        url: proxy + `https://solr-aws-elb-production.ratemyprofessors.com//solr/rmp/select/?solrformat=true&rows=1&wt=json&q=${lastName}+${firstName}+AND+schoolid_s%3A1270&defType=edismax&qf=teacherfirstname_t%5E2000+teacherlastname_t%5E2000+siteName=rmp&rows=1&start=0&fl=pk_id+averageratingscore_rf`,
         success: (result) => {
             profInfo[name]['rmp'] = new Object;
             result = JSON.parse(result);
