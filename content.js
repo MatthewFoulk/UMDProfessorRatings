@@ -7,6 +7,7 @@ const sectInstContClass = ".section-instructors-container"; // Container holding
 const sectInstClass = ".section-instructor" // Span holding instructor name
 
 // PlanetTerp
+const baseApiCallPlanetTerp = 'https://api.planetterp.com/v1/professor?name='
 const ratingPlanetTerpClass = ".rating-planet-terp" // Class for planet terp rating objects
 const logoPlanetTerpPath = '/images/PlanetTerpLogo.png'; // Goes next to rating
 const planetTerpBlue = "#0099FC"; // Color of planetTerps logo
@@ -59,12 +60,26 @@ async function getInfoPT(name){
 
     /* Divide full name into first and last names */
     var names = name.split(" ")
-    var firstName = names[0];
-    var lastName = names[1];
+
+    /* Build api call url */
+    var apiCall = baseApiCallPlanetTerp;
+    var firstName = true;
+
+    for (namePart of names){
+        if (firstName){
+            apiCall += namePart;
+            firstName = false;
+        } else {
+            apiCall += "%20" + namePart;
+        }
+    }
+
+    /* Add api call ending to get reviews */
+    apiCall += '&reviews=true'
 
     /* Fetch professor ratings from Planet Terp */
     $.ajax({
-        url: proxy + `https://api.planetterp.com/v1/professor?name=${firstName}%20${lastName}&reviews=true`,
+        url: proxy + apiCall,
         type: "GET",
         success: (result) => {
             console.log(result);
