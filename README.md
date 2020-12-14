@@ -1,7 +1,26 @@
 # UMD Professor Ratings
+> Compare professor ratings right next to their class offerings
 
-Google Chrome Extension to easily compare Univerisity of Maryland professor
-ratings alongside of their class offerings.
+## Table of Contents
+* [General Info](#general-info)
+* [Images](#images)
+* [Skills](#skills)
+* [Status](#status)
+* [Reflection](#reflection)
+* [Contribution](#contribution)
+* [Meta](#meta)
+
+## General Info
+
+Have you ever checked RateMyProfessor or PlanetTerp while picking
+your classes? I would bet money that you have. I know there is nothing
+I hate more than taking a class with bad professor. 
+
+Now, with this [Chrome Extension](https://chrome.google.com/webstore/detail/umd-professor-ratings/fgfodddkancncjeipifhldbceifkomhi?hl=en&authuser=0), you don't even have to leave the page to get 
+professor ratings. You can easily choose the right classes for you and 
+be confident that you will enjoy the professor.
+
+## Images
 
 ![](images/demonstration01.gif)
 
@@ -14,19 +33,9 @@ ratings alongside of their class offerings.
     - MutationObserver
 - API Calls (PlanetTerp)
 
-## Contribution
+## Status
 
-1. Fork it (<https://github.com/matthewfoulk/cuttle/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
-## Meta
-
-Matthew Foulk – [LinkedIn](https://www.linkedin.com/in/matthew-foulk-a7a24318a/) – matthewrfoulk@gmail.com
-
-Distributed under the MIT license. See ``LICENSE`` for more information.
+*Completed*
 
 ## Reflection
 
@@ -84,3 +93,17 @@ ratings then formulate a schedule for a student.
 All-in-all, this was a fun project that produced something really useful
 and taught me several skills I had little to no experience, all the while
 taking almost no time.
+
+## Contribution
+
+1. Fork it (<https://github.com/matthewfoulk/cuttle/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
+
+## Meta
+
+Matthew Foulk – [LinkedIn](https://www.linkedin.com/in/matthew-foulk-a7a24318a/) – matthewrfoulk@gmail.com
+
+Distributed under the MIT license. See ``LICENSE`` for more information.
