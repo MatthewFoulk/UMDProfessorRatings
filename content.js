@@ -7,15 +7,18 @@ const sectInstContClass = ".section-instructors-container"; // Container holding
 const sectInstClass = ".section-instructor" // Span holding instructor name
 
 // PlanetTerp
-const baseApiCallPlanetTerp = 'https://api.planetterp.com/v1/professor?name='
-const ratingPlanetTerpClass = ".rating-planet-terp" // Class for planet terp rating objects
+const baseApiCallPlanetTerp = 'https://api.planetterp.com/v1/professor?name=';
+const endingApiCallPlanetTerp = '&reviews=true';
+const ratingPlanetTerpClass = ".rating-planet-terp"; // Class for planet terp rating objects
 const logoPlanetTerpPath = '/images/PlanetTerpLogo.png'; // Goes next to rating
 const planetTerpBlue = "#0099FC"; // Color of planetTerps logo
 
 // RateMyProfessor
-const ratingRateMyProfessorClass = ".rating-rate-my-professor" // Class for RMP rating objects
-const logoRateMyProfessorPath = 'images/RateMyProfessorLogo.png' // Logo next to rating
-const rateMyProfessorBlue = '#0021FF' //Color of RMP logo
+const baseApiCallRateMyProfessor = 'https://solr-aws-elb-production.ratemyprofessors.com//solr/rmp/select/?solrformat=true&rows=1&wt=json&q=';
+const endingApiCallRateMyProfessor = '+AND+schoolid_s%3A1270&defType=edismax&qf=teacherfirstname_t%5E2000+teacherlastname_t%5E2000+siteName=rmp&rows=1&start=0&fl=pk_id+averageratingscore_rf'
+const ratingRateMyProfessorClass = ".rating-rate-my-professor"; // Class for RMP rating objects
+const logoRateMyProfessorPath = 'images/RateMyProfessorLogo.png'; // Logo next to rating
+const rateMyProfessorBlue = '#0021FF'; //Color of RMP logo
 
 // CORS proxy
 const proxy = "https://cryptic-cliffs-23292.herokuapp.com/";
@@ -58,24 +61,29 @@ function getProfessors(){
  */
 async function getInfoPT(name){
 
-    /* Divide full name into first and last names */
-    var names = name.split(" ")
+    /* Get all of the seperate parts of professor's name
+        (typically [first, last]) */
+    var names = name.split(" ");
 
     /* Build api call url */
     var apiCall = baseApiCallPlanetTerp;
     var firstName = true;
 
     for (namePart of names){
+
+        /* No space before first name */
         if (firstName){
             apiCall += namePart;
             firstName = false;
+        
+        /* Add space before any additional names */
         } else {
             apiCall += "%20" + namePart;
         }
     }
 
     /* Add api call ending to get reviews */
-    apiCall += '&reviews=true'
+    apiCall += endingApiCallPlanetTerp;
 
     /* Fetch professor ratings from Planet Terp */
     $.ajax({
@@ -109,13 +117,19 @@ async function getInfoPT(name){
 }
 
 function getInfoRMP(name){
-    /* Divide full name into first and last names */
-    var names = name.split(" ")
+
+    /* Split into first name and last name */
+    var names = name.split(" ");
     var firstName = names[0];
     var lastName = names[1];
+
+    /* Build api call */
+    apiCall = baseApiCallRateMyProfessor 
+    apiCall += lastName + '+' + firstName + endingApiCallRateMyProfessor
+
     /* Fetch professor ratings from Planet Terp */
     $.ajax({
-        url: proxy + `https://solr-aws-elb-production.ratemyprofessors.com//solr/rmp/select/?solrformat=true&rows=1&wt=json&q=${lastName}+${firstName}+AND+schoolid_s%3A1270&defType=edismax&qf=teacherfirstname_t%5E2000+teacherlastname_t%5E2000+siteName=rmp&rows=1&start=0&fl=pk_id+averageratingscore_rf`,
+        url: proxy + apiCall,
         success: (result) => {
             profInfo[name]['rmp'] = new Object;
             result = JSON.parse(result);
