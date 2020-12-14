@@ -6,15 +6,15 @@
 * [Images](#images)
 * [Skills](#skills)
 * [Status](#status)
-* [Reflection](#reflection)
 * [Contribution](#contribution)
 * [Meta](#meta)
+* [Reflection](#reflection)
 
 ## General Info
 
 Have you ever checked RateMyProfessor or PlanetTerp while picking
 your classes? I would bet money that you have. I know there is nothing
-I hate more than taking a class with bad professor. 
+I hate more than taking a class with a bad professor. 
 
 Now, with this [Chrome Extension](https://chrome.google.com/webstore/detail/umd-professor-ratings/fgfodddkancncjeipifhldbceifkomhi?hl=en&authuser=0), you don't even have to leave the page to get 
 professor ratings. You can easily choose the right classes for you and 
@@ -37,10 +37,24 @@ be confident that you will enjoy the professor.
 
 *Completed*
 
+## Contribution
+
+1. Fork it (<https://github.com/matthewfoulk/cuttle/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
+
+## Meta
+
+Matthew Foulk – [LinkedIn](https://www.linkedin.com/in/matthew-foulk-a7a24318a/) – matthewrfoulk@gmail.com
+
+Distributed under the MIT license. See ``LICENSE`` for more information.
+
 ## Reflection
 
-Start Date: 12/10/2020
-End Date: 12/11/2020
+Start Date: 12/10/2020  
+End Date: 12/11/2020  
 
 I pick 100% of my classes based on the quality of professors because 
 they make or break a class. I had just finsihed registering for the 
@@ -93,17 +107,3 @@ ratings then formulate a schedule for a student.
 All-in-all, this was a fun project that produced something really useful
 and taught me several skills I had little to no experience, all the while
 taking almost no time.
-
-## Contribution
-
-1. Fork it (<https://github.com/matthewfoulk/cuttle/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
-## Meta
-
-Matthew Foulk – [LinkedIn](https://www.linkedin.com/in/matthew-foulk-a7a24318a/) – matthewrfoulk@gmail.com
-
-Distributed under the MIT license. See ``LICENSE`` for more information.
