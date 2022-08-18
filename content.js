@@ -186,6 +186,7 @@ function displayRatingPT(name){
                     var textNode = document.createTextNode(profInfo[name]["pt"]['rating'].toFixed(2));
                     node.appendChild(textNode);
                     node.href = profInfo[name]["pt"]['url'];
+                    node.target = "_blank";
                     node.className = 'rating-planet-terp';
                     node.style.color = planetTerpBlue;
                     section.appendChild(node);
@@ -225,6 +226,7 @@ function displayRatingRMP(name){
                     var textNode = document.createTextNode(profInfo[name]["rmp"]['rating'].toFixed(2));
                     node.appendChild(textNode);
                     node.href = profInfo[name]["rmp"]['url'];
+                    node.target = "_blank";
                     node.className = 'rating-rate-my-professor';
                     node.style.color = rateMyProfessorBlue;
                     section.appendChild(node);
