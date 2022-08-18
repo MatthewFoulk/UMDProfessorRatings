@@ -7,7 +7,7 @@ const sectInstContClass = ".section-instructors-container"; // Container holding
 const sectInstClass = ".section-instructor" // Span holding instructor name
 
 // PlanetTerp
-const baseApiCallPlanetTerp = 'https://api.planetterp.com/v1/professor?name=';
+const baseApiCallPlanetTerp = 'https://planetterp.com/api/v1/professor?name=';
 const endingApiCallPlanetTerp = '&reviews=true';
 const ratingPlanetTerpClass = ".rating-planet-terp"; // Class for planet terp rating objects
 const logoPlanetTerpPath = '/images/PlanetTerpLogo.png'; // Goes next to rating
