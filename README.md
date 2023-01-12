@@ -47,8 +47,8 @@ be confident that you will enjoy the professor.
 
 ## Meta
 
-Matthew Foulk – [LinkedIn](https://www.linkedin.com/in/matthew-foulk-a7a24318a/) – matthewrfoulk@gmail.com
-updates by Forrest Milner – [LinkedIn](https://www.linkedin.com/in/forrest-milner-4b76191aa/) – forrestmilner@gmail.com
+Matthew Foulk – [LinkedIn](https://www.linkedin.com/in/matthew-foulk-a7a24318a/) – matthewrfoulk@gmail.com  
+1/11/23 updates by Forrest Milner – [LinkedIn](https://www.linkedin.com/in/forrest-milner-4b76191aa/) – forrestmilner@gmail.com
 
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
