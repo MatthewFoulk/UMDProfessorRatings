@@ -10,8 +10,8 @@
         }
     ],
     "web_accessible_resources": [{
-     "resources": ["images/*.jpg", "images/*.png"],
-     "matches": [],
+     "resources": ["/images/*"],
+     "matches": ["https://app.testudo.umd.edu/*"],
      "extension_ids": []
     }],
     "icons":{
