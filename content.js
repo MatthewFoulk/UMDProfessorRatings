@@ -17,7 +17,7 @@ const logoRateMyProfessorPath = 'images/RateMyProfessorLogo.png'; // Logo next t
 const rateMyProfessorBlue = '#0021FF'; //Color of RMP logo
 
 // CORS proxy
-const proxy = "https://cryptic-cliffs-23292.herokuapp.com/";
+const proxy = "https://nextjs-cors-anywhere.vercel.app/api?endpoint=";
 
 
 const profInfo = {}; // Store professor ratings, links, slug, etc
