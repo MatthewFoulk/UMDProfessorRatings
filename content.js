@@ -134,6 +134,12 @@ function displayRatingRMP(name) {
     for (const section of sectionInfos) {
         /* Verify rating not already added */
         if (section.querySelectorAll(ratingRateMyProfessorClass).length === 0) {
+            // remove all elements with 'rating-loading' class rating-loading, remove it.
+            if(section.nextSibling.className === 'rating-loading') {
+                section.nextSibling.remove();
+                console.log('removed loading');
+            }
+            
             if (!(profInfo[name]["rmp"] == null)) {
                 /* Place an image next to rating with planet terp logo also with link to professor reviews on planet terp */
                 const imageLink = document.createElement('a');
